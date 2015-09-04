@@ -1,0 +1,23 @@
+h4 {
+  border-bottom: 1px solid gray;
+}
+
+.fancy {
+  font-family: 'Tangerine', cursive;
+}
+
+.no-deco {
+  text-decoration: none !important;
+  color: inherit;
+}
+.no-deco:hover {
+  color: inherit;
+}
+
+table a:not(.btn), .table a:not(.btn) {
+  color: white;
+  text-decoration: none;
+}
+table a:not(.btn):hover, .table a:not(.btn):hover {
+  color: yellow;
+}

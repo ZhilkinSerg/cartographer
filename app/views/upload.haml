@@ -1,0 +1,34 @@
+%h4
+  Upload your own
+  %small
+    as
+    %i #{@login}
+Here you can turn your world data into a map (arr)! Select all files matching the pattern "o.NUMBER.NUMBER" from the folder of your save (look inside "saves/" in the folder where you have C:DDA installed).
+%br
+%br
+%b.text-warning NOTE:
+This will only work with saves from recent C:DDA versions. Stable 0.C won't work! You need your world to be created at least with an experimental built at or past
+%a{href: 'https://github.com/CleverRaven/Cataclysm-DDA/pull/12790', target: '_blank'} this commit
+(that will include 0.D once it's out).
+%br
+%br
+Click
+%a{href: '/logout'} here
+to log out.
+%br
+%br
+- if @errors[:upload]
+  .alert.alert-danger!= @errors[:upload]
+- if @msgs[:upload]
+  .alert.alert-success!= @msgs[:upload]
+%form.form{role: 'form', action: '/upload', enctype: 'multipart/form-data', method: 'post'}
+  .form-group
+    %label{for: 'files'} Select files
+    %input.btn.btn-default{id: 'files', name: 'files[]', type: 'file', multiple: 'true'}
+  .form-group
+    %label{for: 'comment'} Comment*
+    %input.form-control{id: 'comment', name: 'comment', type: 'text'}
+    %b *
+    Completely optional. If you put crap in here you're crap yourself!
+  .form-group
+    %button.btn.btn-success{type: 'submit'} Upload

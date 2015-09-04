@@ -1,0 +1,32 @@
+!!!
+%html{lang: 'en'}
+  %head
+    %meta{charset: 'utf-8'}/
+    %meta{content: 'IE=edge', 'http-equiv' => 'X-UA-Compatible'}/
+    %meta{content: 'width=device-width, initial-scale=1', name: 'viewport'}/
+    %title Cartographer
+    %link{href: '/favicon.ico', rel: 'icon', type: 'image/x-icon'}/
+    %link{href: '//bootswatch.com/cyborg/bootstrap.min.css', rel: 'stylesheet', type: 'text/css'}/
+    %link{href: '//fonts.googleapis.com/css?family=Tangerine', rel: 'stylesheet', type: 'text/css'}/
+    %link{href: '/css/main.css', rel: 'stylesheet'}/
+    %script{src: '//code.jquery.com/jquery-2.1.3.min.js'}
+    %script{src: '//maxcdn.bootstrapcdn.com/bootstrap/3.3.4/js/bootstrap.min.js'}
+    %script{src: '/js/main.js'}
+  %body
+    .container
+      %h1.fancy
+        %center
+          %a.no-deco{href: '/'} Cartographer
+      - if (r = ready).any?
+        != haml :ready, layout: false, locals: {items: r}
+      - unless @login
+        != haml :logreg, layout: false
+      - else
+        != haml :upload, layout: false
+      - if (q = queue).any?
+        != haml :queue, layout: false, locals: {items: q}
+      %small
+        %center
+          Powered by
+          %a{href: 'https://github.com/drbig/cartographer', target: '_blank'} Cartographer
+          &copy; Copyright 2015 Piotr S. Staszewski.

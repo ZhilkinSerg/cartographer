@@ -1,0 +1,19 @@
+%h4 Processing queue
+We have some work to be done! If your uploaded map shows an error please don't panic - all such cases are investigated by me.
+%br
+%br
+%table#queue.table.table-striped
+  %thead
+    %tr
+      %th Map
+      %th By
+      %th Status
+      %th Uploaded
+  %tbody
+    - items.each do |i|
+      %tr
+        %td
+          %b= i.id
+        %td= i.user.login
+        %td{class: get_state_class(i)}= i.state.to_s.capitalize
+        %td.text-nowrap= i.created_at.strftime(TIME_FMT)

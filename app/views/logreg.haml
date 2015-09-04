@@ -1,0 +1,15 @@
+%h4 Login or register
+Life is simple here - you need to be logged in to upload! This will create your user account just as easily (as long as the login isn't already taken). Mind the passwords here are stored probably more securely than at your bank/401k - no recovery possible. Mind what you type.
+%br
+%br
+- if @errors[:logreg]
+  .alert.alert-danger!= @errors[:logreg]
+%form.form{role: 'form', action: '/logreg', method: 'post'}
+  .form-group
+    %label{for: 'login'} Login
+    %input.form-control{id: 'login', name: 'login'}
+  .form-group
+    %label{for: 'pass'} Password
+    %input.form-control{id: 'pass', name: 'pass', type: 'password'}
+  .form-group
+    %button.btn.btn-success{type: 'submit'} Do it

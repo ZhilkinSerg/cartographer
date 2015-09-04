@@ -1,0 +1,22 @@
+%h4 Recent maps
+We show here the last 32 maps. Every map is accessible for a period of few weeks, so your link might work even though the map is not here.
+%br
+%br
+- if @errors[:ready]
+  .alert.alert-danger!= @errors[:ready]
+%table#ready.table.table-striped
+  %thead
+    %tr
+      %th Map
+      %th By
+      %th Stats
+      %th Uploaded
+  %tbody
+    - items.each do |i|
+      %tr
+        %td
+          %b
+            %a{href: "/map/#{i.id}", target: '_blank', title: i.comment} #{i.id} (size: #{i.size})
+        %td= i.user.login
+        %td.text-nowrap= i.stats
+        %td.text-nowrap= i.created_at.strftime(TIME_FMT)
