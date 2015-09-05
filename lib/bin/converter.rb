@@ -24,6 +24,7 @@ class Worker < Cartographer::Worker
     map.state = :processing
     unless map.save
       log :warn, "Couldn't update status of map #{map.id} @ process"
+      log :debug, map.errors
     end
     
     target_path = "#{ENV['WEB_STORE']}/#{map.id}.html"
@@ -54,11 +55,13 @@ class Worker < Cartographer::Worker
       map.stats = stats
       unless map.save
         log :warn, "Couldn't update status of map #{map.id} @ process/done"
+        log :debug, map.errors
       end
     rescue Break
       map.state = :error
       unless map.save
         log :warn, "Couldn't update status of map #{map.id} @ process/break"
+        log :debug, map.errors
       end
       enqueue('ctg-clean', data, ENV['KEEP_BROKEN'].to_i)
       if target
