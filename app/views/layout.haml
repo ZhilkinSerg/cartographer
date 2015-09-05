@@ -25,6 +25,7 @@
         != haml :upload, layout: false
       - if (q = queue).any?
         != haml :queue, layout: false, locals: {items: q}
+      != haml :stats, layout: false
       %small
         %center
           Powered by

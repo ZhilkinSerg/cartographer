@@ -1,0 +1,21 @@
+%h4 Statistics
+Everything is better with numbers!
+%br
+%br
+%table.table.table-striped
+  %thead
+    %tr
+      %th Since
+      %th.text-right Hits
+      %th.text-right Downloads
+      %th.text-right Users
+      %th.text-right Maps
+      %th.text-right Errors
+  %tbody
+    %tr
+      %td.text-nowrap= stats.created_at.strftime(TIME_FMT)
+      %td.text-right= stats.hits
+      %td.text-right= stats.downloads
+      %td.text-right= stats.users
+      %td.text-right= stats.maps
+      %td.text-right= stats.failed

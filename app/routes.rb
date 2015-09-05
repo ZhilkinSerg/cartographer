@@ -30,10 +30,24 @@ module Cartographer
           ''
         end
       end
+
+      def stats
+        settings.stats
+      end
     end
 
     def registered(app)
       app.helpers Helpers
+
+      stats = Models::Stats.first(:order => [:created_at.desc])
+      unless stats
+        stats = Models::Stats.create
+        unless stats.save
+          log :error, 'Couldn\'t save new stats'
+          log :error, stats.errors
+        end
+      end
+      app.set :stats, stats
 
       app.before do
         @login  = session[:login]
@@ -41,6 +55,11 @@ module Cartographer
         @msgs   = session[:msgs] || Hash.new # for stuff done and dandy
         session.delete(:errors)
         session.delete(:msgs)
+      end
+
+      app.after do
+        stats.hits += 1
+        stats.save
       end
 
       app.get '/' do
@@ -54,6 +73,10 @@ module Cartographer
           redirect '/'
         end
 
+        map.downloads += 1
+        map.save
+
+        stats.downloads += 1
         redirect map.link
       end
 
@@ -79,9 +102,12 @@ module Cartographer
             @errors[:logreg] = 'Something went wrong, sorry!'
             log :error, "Couldn't save user '#{params[:login]}'"
             log :error, user.errors
+            stats.failed += 1
+            raise Break
           end
 
           session[:login] = user.login
+          stats.users += 1
           redirect '/'
         rescue Break
           # just a dandy exit
@@ -108,6 +134,7 @@ module Cartographer
             @errors[:upload] = 'Something went wrong, sorry. Will investigate!'
             log :error, 'Couldn\'t save map @ /upload'
             log :error, map.errors
+            stats.failed += 1
             raise Break
           end
 
@@ -119,6 +146,7 @@ module Cartographer
             log :error, "Couldn't create upload dir for #{map.id}"
             log :error, e.to_s
             log :debug, e.backtrace.join("\n")
+            stats.failed += 1
             raise Break
           end
 
@@ -132,10 +160,12 @@ module Cartographer
               log :error, "Couldn't create upload file #{f[:filename]} for #{map.id}"
               log :error, e.to_s
               log :debug, e.backtrace.join("\n")
+              stats.failed += 1
               raise Break
             end
           end
 
+          stats.maps += 1
           enqueue('ctg-process', {id: map.id, path: upload_dir})
           @msgs[:upload] = "Received #{files_count} file(s) for your map <b>#{map.id}</b>."
         rescue Break
@@ -145,6 +175,7 @@ module Cartographer
             unless map.save
               log :error, 'Couldn\'t save map @ /upload/error'
               log :error, map.errors
+              stats.failed += 1
             end
             enqueue('ctg-clean', {id: map.id, path: upload_dir},
                     ENV['KEEP_BROKEN'].to_i)

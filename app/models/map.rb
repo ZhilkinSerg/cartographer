@@ -10,7 +10,7 @@ module Cartographer
       property :size,       String
       property :stats,      String
       property :comment,    Text
-      property :downloads,  Integer
+      property :downloads,  Integer, default: 0
 
       timestamps :created_at, :updated_on
 
