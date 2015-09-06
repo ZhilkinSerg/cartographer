@@ -18,5 +18,5 @@ We show here the last 32 maps. Every map is accessible for a period of few weeks
           %b
             %a{href: "/map/#{i.id}", target: '_blank', title: i.comment} #{i.id} (size: #{i.size})
         %td= i.user.login
-        %td.text-nowrap= i.stats
+        %td.text-nowrap #{i.stats} #{i.downloads}x
         %td.text-nowrap= i.created_at.strftime(TIME_FMT)
