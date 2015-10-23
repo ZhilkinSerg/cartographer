@@ -21,7 +21,7 @@ class Worker < Cartographer::Worker
     map = Map.get(data[:id])
     if map && map.state != :ready
       log :info, "Removing broken map #{map.id}"
-      unless map.delete
+      unless map.destroy
         log :error, 'Couldn\'t delete broken map'
         log :debug, map.errors
       end
